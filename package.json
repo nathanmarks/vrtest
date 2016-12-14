@@ -1,0 +1,19 @@
+{
+  "name": "vrtest",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nathanmarks/vrtest.git"
+  },
+  "author": "Nathan Marks <info@nathanmarks.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nathanmarks/vrtest/issues"
+  },
+  "homepage": "https://github.com/nathanmarks/vrtest#readme"
+}
