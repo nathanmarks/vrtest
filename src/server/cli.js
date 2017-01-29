@@ -21,9 +21,10 @@ export default function start(
 
   program
     .command('server')
+    .option('-c, --config', 'Specify a .js config file')
     .description('Run the visual regression test server')
-    .action(() => {
-      return boot(readConfig({}));
+    .action((config = {}) => {
+      return boot(readConfig(config));
     });
 
   if (!args.slice(2).length) {
@@ -31,6 +32,4 @@ export default function start(
   } else {
     program.parse(args);
   }
-
-  return program;
 }

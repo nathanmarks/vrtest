@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 
-require('../lib/server/cli.js')(process.argv);
+require('babel-register');
+require('../src/server/cli.js').default(process.argv);

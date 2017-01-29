@@ -2,7 +2,7 @@
 
 const DEFAULT_OPTIONS = {};
 
-export function createSuite(name: string, options?: SuiteOptions): Suite {
+export function createSuite(name: string, options?: vrtest$SuiteOptions): vrtest$Suite {
   const suite = {
     name,
     options: applyDefaultOptions(options),
@@ -10,7 +10,7 @@ export function createSuite(name: string, options?: SuiteOptions): Suite {
     createTest,
   };
 
-  function createTest(testName: string, callback: Function): Test {
+  function createTest(testName: string, callback: Function): vrtest$Test {
     const test = testFactory(testName, callback);
     suite.tests.push(test);
     return test;
@@ -19,7 +19,7 @@ export function createSuite(name: string, options?: SuiteOptions): Suite {
   return suite;
 }
 
-function testFactory(name: string, callback: Function): Test {
+function testFactory(name: string, callback: Function): vrtest$Test {
   function exec(...args: any): Promise<any> {
     return Promise.resolve(callback(...args));
   }
@@ -27,6 +27,6 @@ function testFactory(name: string, callback: Function): Test {
   return { name, exec };
 }
 
-function applyDefaultOptions(options?: SuiteOptions = {}): SuiteOptions {
+function applyDefaultOptions(options?: vrtest$SuiteOptions = {}): vrtest$SuiteOptions {
   return { ...DEFAULT_OPTIONS, ...options };
 }

@@ -6,7 +6,6 @@ const ROOT_PATH = path.resolve(__dirname, '../../');
 module.exports = {
   devtool: 'inline-source-map',
   performance: false,
-  // context: pathre,
   target: 'web',
   entry: path.resolve(__dirname, 'simple/index.js'),
   output: {
@@ -31,7 +30,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vrtest': path.resolve(ROOT_PATH, 'src'),
+      vrtest: path.resolve(ROOT_PATH, 'src'),
     },
   },
   plugins: [

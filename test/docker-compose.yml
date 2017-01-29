@@ -1,0 +1,14 @@
+hub:
+  image: selenium/hub:3.0.1-carbon
+  ports:
+    - 4444:4444
+chrome:
+  image: selenium/node-chrome:3.0.1-carbon
+  links:
+    - hub
+chromedebug:
+  image: selenium/node-chrome-debug:3.0.1-carbon
+  links:
+    - hub
+  ports:
+    - 5900:5900

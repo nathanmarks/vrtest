@@ -1,23 +1,25 @@
 // @flow
 
 import { createSuite as suiteFactory } from './suite';
-import { createRunner as runnerFactory } from './runner';
+import { createTestController as testControllerFactory } from './testController';
 
-function createVrTest(): VrTest {
-  const vrtest = {
+function createVrTest(): vrtest$Client {
+  const vrtest: vrtest$Client = {
     suites: [],
     createSuite,
-    createRunner,
+    createTestController,
+    testController: null,
   };
 
-  function createSuite(name: string, options?: SuiteOptions): Suite {
+  function createSuite(name: string, options?: vrtest$SuiteOptions): vrtest$Suite {
     const newSuite = suiteFactory(name, options);
     vrtest.suites.push(newSuite);
     return newSuite;
   }
 
-  function createRunner(): Runner {
-    return runnerFactory(vrtest.suites);
+  function createTestController(): vrtest$TestController {
+    vrtest.testController = testControllerFactory(vrtest.suites);
+    return vrtest.testController;
   }
 
   return vrtest;

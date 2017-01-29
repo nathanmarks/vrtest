@@ -1,13 +1,85 @@
-import buildFixture from 'test/fixtures/build';
+// @flow
+
+import { assert } from 'chai';
+import { spy } from 'sinon';
+import proxyquire from 'proxyquire';
+import run from '../../src/server/run';
+import buildFixture from '../fixtures/build';
 
 describe('e2e: simple', () => {
-  it('test', function () {
+  let consoleLog;
+  let jsonReporter;
+
+  beforeEach(() => {
+    consoleLog = spy();
+    jsonReporter = proxyquire('../../src/server/reporters/json', {
+      './utils/logger': {
+        log: consoleLog,
+      },
+    }).default;
+  });
+
+  it('should pass both tests', function () {
     this.timeout(Infinity);
 
-    return buildFixture('simple')
+    return buildFixture('simple/tests.js')
       .then((stats) => {
-        console.log(stats.compilation.assets['fixture.js'].existsAt);
-        return true;
+        const tests = stats.compilation.assets['tests.js'].existsAt;
+
+        const config = {
+          tests,
+          storage: {
+            baseline: 'test/fixtures/simple/baseline',
+            output: 'tmp/output',
+          },
+          profiles: [{
+            name: 'phantomjs',
+            browser: 'phantomjs',
+          }],
+          reporters: [jsonReporter],
+        };
+
+        return run(config);
+      })
+      .then(() => {
+        const results = JSON.parse(consoleLog.args[0][0]);
+        assert.strictEqual(results.total, 2);
+        assert.strictEqual(results.passes, 2);
+        assert.strictEqual(results.failures, 0);
+        return null;
+      });
+  });
+
+  it('should fail the second test', function () {
+    this.timeout(Infinity);
+
+    return buildFixture('simple/tests-broken.js')
+      .then((stats) => {
+        const tests = stats.compilation.assets['tests.js'].existsAt;
+
+        const config = {
+          tests,
+          storage: {
+            baseline: 'test/fixtures/simple/baseline',
+            output: 'tmp/output',
+          },
+          profiles: [{
+            name: 'phantomjs',
+            browser: 'phantomjs',
+          }],
+          reporters: [jsonReporter],
+        };
+
+        return run(config);
+      })
+      .then(() => {
+        const results = JSON.parse(consoleLog.args[0][0]);
+        assert.strictEqual(results.total, 2);
+        assert.strictEqual(results.passes, 1);
+        assert.strictEqual(results.failures, 1);
+        assert.strictEqual(results.tests[0].passed, true);
+        assert.strictEqual(results.tests[1].passed, false);
+        return null;
       });
   });
 });
