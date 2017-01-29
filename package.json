@@ -1,12 +1,20 @@
 {
   "name": "vrtest",
-  "version": "0.1.0",
-  "description": "",
+  "version": "0.0.1-alpha",
+  "private": true,
+  "keywords": [],
+  "description": "wip",
   "main": "index.js",
   "bin": {
     "vrtest": "./bin/vrtest"
   },
   "scripts": {
+    "build": "yarn run clean && yarn run check && yarn run build:babel && yarn run build:copy-files",
+    "build:babel": "babel ./src --ignore *.spec.js --out-dir ./build",
+    "build:copy-files": "babel-node ./scripts/copy-files.js",
+    "check": "yarn run lint && yarn run flow && yarn run test",
+    "clean": "rimraf build && rimraf tmp",
+    "lint": "eslint src test",
     "flow": "flow --show-all-errors",
     "test": "cross-env NODE_ENV=test babel-node test/index.js",
     "test:coverage": "cross-env NODE_ENV=test babel-node ./node_modules/istanbul/lib/cli.js cover test/index.js",

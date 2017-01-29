@@ -65,7 +65,7 @@ declare type vrtest$TestController = {
   next: () => Promise<vrtest$TestController>,
   done: boolean,
   currentTest: null | vrtest$Test,
-  generator: null | Generator<Promise<typeof undefined>, boolean, void>,
+  currentSuite: null | vrtest$Suite,
 };
 
 declare type vrtest$Suite = {

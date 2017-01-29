@@ -1,6 +1,7 @@
 /bin
 /flow
 /flow-typed
+/test/fixtures
 *.server.js
 *.config.js
 **/node_modules/**

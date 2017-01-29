@@ -30,19 +30,20 @@ describe('client/testController', () => {
     testController = createTestController(suites);
   });
 
-  describe('.start', () => {
-    it('should return a generator that runs each test', () => {
-      const testRunner = testController.start(fooDocument);
+  describe('.start -> .next', () => {
+    it('should return the test controller and start the underlying generator', () => {
+      const test = testController.start(fooDocument);
 
-      assert.strictEqual(testRunner.toString(), '[object Generator]');
+      assert.strictEqual(test, testController);
 
-      testRunner.next();
+      testController.next();
+
       assert.strictEqual(fooDocument.add.callCount, 1);
       assert.strictEqual(fooDocument.add.args[0][0], '<button>foo</button>');
 
-      testRunner.next();
-      assert.strictEqual(fooDocument.add.callCount, 2);
-      assert.strictEqual(fooDocument.add.args[1][0], '<h1>foo</h1>');
+      // testRunner.next();
+      // assert.strictEqual(fooDocument.add.callCount, 2);
+      // assert.strictEqual(fooDocument.add.args[1][0], '<h1>foo</h1>');
 
       // const results = testRunner.next();
 

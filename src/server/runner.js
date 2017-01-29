@@ -71,47 +71,55 @@ function setupTests(driver: WebDriverClass) {
     });
 }
 
+function nextTest(driver: WebDriverClass) {
+  return driver
+    .executeAsyncScript(
+      function getTestInfo() {
+        const callback = arguments[arguments.length - 1];
+        const testController = window.__vrtest__.testController;
+        return testController.next().then(() => callback({
+          suiteName: testController.currentSuite.name,
+          testName: testController.currentTest.name,
+          done: testController.done,
+        }));
+      },
+    );
+}
+
 async function runTests(
   driver: WebDriverClass,
   options: vrtest$RunnerOptions,
   events: events$EventEmitter,
 ) {
   const { profile, storage } = options;
+
   let done = false;
-  let currentTestName = '';
-
-  function initNextTest() {
-    const callback = arguments[arguments.length - 1];
-    const testController = window.__vrtest__.testController;
-    return testController.next().then(() => callback(testController));
-  }
-
-  function getTestInfo(testController: vrtest$TestController) {
-    done = testController.done;
-    if (testController.currentTest) {
-      currentTestName = testController.currentTest.name;
-    }
-  }
+  let lastSuite = '';
 
   while (done === false) {
-    await driver
-      .executeAsyncScript(initNextTest)
-      .then(getTestInfo);
+    const testInfo = await nextTest(driver);
+
+    done = testInfo.done;
 
     if (done === false) {
+      const { testName, suiteName } = testInfo;
+
+      if (lastSuite !== suiteName) {
+        events.emit('suite', suiteName);
+        lastSuite = suiteName;
+      }
+
+      events.emit('test', testName);
+
       const element = await driver.findElement(By.css('body > *:first-child'));
       const elementSize = await element.getSize();
       const elementLocation = await element.getLocation();
       const windowSize = await driver.manage().window().getSize();
       const screenshotData = await driver.takeScreenshot();
 
-      const screenshotPath = path.resolve(storage.output, profile.name, `${currentTestName}.png`);
-      const expectedPath = path.resolve(storage.baseline, profile.name, `${currentTestName}.png`);
-      const diffPath = path.resolve(storage.output, profile.name, `${currentTestName}.diff.png`);
-
-      // const test1 = await fs.access(screenshotPath)
-      //   .then(() => true)
-      //   .catch(() => false);
+      const screenshotPath = path.resolve(storage.output, profile.name, `${testName}.png`);
+      const expectedPath = path.resolve(storage.baseline, profile.name, `${testName}.png`);
+      const diffPath = path.resolve(storage.output, profile.name, `${testName}.diff.png`);
 
       await saveScreenshot(screenshotPath, screenshotData);
       await cropScreenshot(
@@ -128,7 +136,7 @@ async function runTests(
       );
 
       const test = {
-        name: currentTestName,
+        name: testName,
         screenshotPath,
         expectedPath,
         diffPath,
