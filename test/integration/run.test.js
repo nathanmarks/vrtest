@@ -6,7 +6,7 @@ import proxyquire from 'proxyquire';
 import run from '../../src/server/run';
 import buildFixture from '../fixtures/build';
 
-describe('e2e: simple', () => {
+describe('integration: server/run', () => {
   let consoleLog;
   let jsonReporter;
 
