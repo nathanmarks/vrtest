@@ -1,0 +1,17 @@
+machine:
+  node:
+    version:
+      6.9.5
+
+dependencies:
+  cache_directories:
+    - ~/.yarn-cache
+  override:
+    - yarn install --cache-folder ~/.yarn-cache --pure-lockfile
+
+test:
+  override:
+    - yarn run lint
+    - yarn run test
+  post:
+    - bash <(curl -s https://codecov.io/bash)

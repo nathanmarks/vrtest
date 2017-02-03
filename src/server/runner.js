@@ -65,15 +65,19 @@ function loadTestPage(driver: WebDriverClass) {
 
 function setupTests(driver: WebDriverClass) {
   return driver
-    .executeScript(function () {
-      window.__vrtest__.createTestController();
-      window.__vrtest__.testController.start();
-    });
+    .executeScript(
+      /* istanbul ignore next */
+      function () {
+        window.__vrtest__.createTestController();
+        window.__vrtest__.testController.start();
+      },
+    );
 }
 
 function nextTest(driver: WebDriverClass) {
   return driver
     .executeAsyncScript(
+      /* istanbul ignore next */
       function getTestInfo() {
         const callback = arguments[arguments.length - 1];
         const testController = window.__vrtest__.testController;
