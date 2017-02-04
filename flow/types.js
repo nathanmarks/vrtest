@@ -31,9 +31,14 @@ declare type vrtest$Profile = {
 };
 
 declare type vrtest$RunnerOptions = {
-  profile: vrtest$Profile,
   interactive?: boolean,
+  profile: vrtest$Profile,
+  selenium: vrtest$SeleniumOptions,
   storage: vrtest$Storage,
+};
+
+declare type vrtest$SeleniumOptions = {
+  server: string,
 };
 
 declare type vrtest$Storage = {

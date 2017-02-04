@@ -13,7 +13,6 @@ import {
 const { By, Builder } = webdriver;
 
 export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runner {
-  const { profile } = options;
   const events: events$EventEmitter = new EventEmitter();
   const runner = {
     on,
@@ -25,20 +24,24 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
   }
 
   function run(): Promise<null> {
-    const driver = buildDriver(profile);
+    const driver = buildDriver(options);
 
     events.emit('start');
-
     return configureWindow(driver)
       .then(() => loadTestPage(driver))
       .then(() => setupTests(driver))
       .then(() => runTests(driver, options, events))
-      .then(() => driver.quit())
+      .then(() => {
+        // console.log('quit driver');
+        return driver.quit();
+      })
       .catch((err) => {
-        console.error(err);
+        // console.log('error!');
         events.emit('error', err);
+        return true;
       })
       .then(() => {
+        // console.log('end');
         events.emit('end');
         return null;
       });
@@ -47,12 +50,16 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
   return runner;
 }
 
-function buildDriver(profile: vrtest$Profile) {
-  const driver = new Builder()
-    .forBrowser(profile.browser)
-    .build();
+function buildDriver(options: vrtest$RunnerOptions) {
+  const { profile, selenium } = options;
 
-  return driver;
+  const driver = new Builder().forBrowser(profile.browser);
+
+  if (selenium) {
+    driver.usingServer(selenium.server);
+  }
+
+  return driver.build();
 }
 
 function configureWindow(driver: WebDriverClass, width: number = 1000, height: number = 800) {
@@ -60,7 +67,7 @@ function configureWindow(driver: WebDriverClass, width: number = 1000, height: n
 }
 
 function loadTestPage(driver: WebDriverClass) {
-  return driver.get('http://localhost:3090/tests');
+  return driver.get('http://10.200.10.1:3090/tests');
 }
 
 function setupTests(driver: WebDriverClass) {

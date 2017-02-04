@@ -31,7 +31,7 @@ export function boot(config: vrtest$Config): Promise<Server> {
   });
 
   return new Promise((resolve) => {
-    const server = app.listen(config.server.port, (err?: ?Error) => {
+    const server = app.listen(config.server.port, '0.0.0.0', (err?: ?Error) => {
       if (err) {
         throw err;
       }
