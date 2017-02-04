@@ -40,9 +40,11 @@ export function readConfig(overrides?: Object = {}): vrtest$Config {
     config.reporters = [reporters.spec];
   }
 
-  if (!config.testUrl) {
-    config.testUrl = `http://${config.server.host}:${config.server.port}`;
+  const mergedConfig = defaultsDeep({}, config, defaultConfig);
+
+  if (!mergedConfig.testUrl) {
+    mergedConfig.testUrl = `http://${mergedConfig.server.host}:${mergedConfig.server.port}`;
   }
 
-  return defaultsDeep({}, config, defaultConfig);
+  return mergedConfig;
 }
