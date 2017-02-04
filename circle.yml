@@ -21,6 +21,6 @@ dependencies:
 test:
   override:
     - yarn run lint
-    - DOCKER_TEST_URL=http://$(ip addr show docker0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1):3090 yarn run test
+    - DOCKER_TEST_URL=http://$(ip addr show docker0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1):3090 yarn run test:coverage
   post:
     - bash <(curl -s https://codecov.io/bash)
