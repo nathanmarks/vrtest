@@ -6,9 +6,3 @@ chrome:
   image: selenium/node-chrome:3.0.1
   links:
     - hub
-chromedebug:
-  image: selenium/node-chrome-debug:3.0.1
-  links:
-    - hub
-  ports:
-    - 5900:5900

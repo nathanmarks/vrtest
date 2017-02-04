@@ -8,14 +8,20 @@ machine:
 dependencies:
   cache_directories:
     - ~/.yarn-cache
+    - ~/.docker
+  override:
+    - yarn install --cache-folder ~/.yarn-cache --pure-lockfile
+    - mkdir -p ~/.docker
+    - if [[ -e ~/.docker/hub.tar ]]; then docker load -i ~/.docker/hub.tar; fi
+    - docker save selenium/hub:3.0.1 > ~/.docker/hub.tar
+    - if [[ -e ~/.docker/node-chrome.tar ]]; then docker load -i ~/.docker/node-chrome.tar; fi
+    - docker save selenium/node-chrome:3.0.1 > ~/.docker/node-chrome.tar
+
+test:
   pre:
     - docker-compose up -d
   override:
-    - yarn install --cache-folder ~/.yarn-cache --pure-lockfile
-
-test:
-  override:
     - yarn run lint
-    - DOCKER_TEST_URL=http://172.17.42.1:3090 yarn run test
+    - DOCKER_TEST_URL=http://$(ip addr show docker0 | grep "inet\b" | awk '{print $2}' | cut -d/ -f1):3090 yarn run test
   post:
     - bash <(curl -s https://codecov.io/bash)
