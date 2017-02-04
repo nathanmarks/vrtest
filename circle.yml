@@ -16,6 +16,6 @@ dependencies:
 test:
   override:
     - yarn run lint
-    - SELENIUM_TEST_URL=http://172.17.42.1:3090 yarn run test
+    - DOCKER_TEST_URL=http://172.17.42.1:3090 yarn run test
   post:
     - bash <(curl -s https://codecov.io/bash)
