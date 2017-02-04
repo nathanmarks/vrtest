@@ -9,7 +9,7 @@ dependencies:
   cache_directories:
     - ~/.yarn-cache
   pre:
-    - docker-compose up
+    - docker-compose up -d
     - sudo ifconfig lo0 alias 10.200.10.1/24
   override:
     - yarn install --cache-folder ~/.yarn-cache --pure-lockfile
