@@ -5,6 +5,10 @@ machine:
   services:
     - docker
 
+general:
+  artifacts:
+    - tmp/output
+
 dependencies:
   cache_directories:
     - ~/.yarn-cache
