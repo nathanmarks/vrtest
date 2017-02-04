@@ -6,13 +6,18 @@
 
 declare type vrtest$Config = {
   tests: Array<string>,
+  testUrl: string,
   scripts?: Array<string>,
   storage: {
     baseline: string,
     output: string,
   },
   server: {
+    host: string,
     port: number,
+  },
+  selenium: {
+    server: string,
   },
   reporters: Array<(vrtest$Runner) => vrtest$Reporter>,
   profiles: Array<vrtest$Profile>,
@@ -28,17 +33,14 @@ declare type vrtest$Runner = {
 declare type vrtest$Profile = {
   name: string,
   browser: string,
+  testUrl?: string,
 };
 
 declare type vrtest$RunnerOptions = {
   interactive?: boolean,
   profile: vrtest$Profile,
-  selenium: vrtest$SeleniumOptions,
   storage: vrtest$Storage,
-};
-
-declare type vrtest$SeleniumOptions = {
-  server: string,
+  testUrl: string,
 };
 
 declare type vrtest$Storage = {

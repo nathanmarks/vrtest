@@ -8,13 +8,17 @@ import * as reporters from '../reporters';
 
 export const defaultConfig = {
   tests: [],
+  testUrl: null,
   server: {
+    host: '0.0.0.0',
     port: 3090,
   },
   storage: {
     baseline: 'vrtest/baseline',
     output: 'vrtest/output',
   },
+  selenium: {},
+  profiles: [],
   reporters: [],
 };
 
@@ -34,6 +38,10 @@ export function readConfig(overrides?: Object = {}): vrtest$Config {
     config.reporters = [config.reporters];
   } else if (!config.reporters || !config.reporters.length) {
     config.reporters = [reporters.spec];
+  }
+
+  if (!config.testUrl) {
+    config.testUrl = `http://${config.server.host}:${config.server.port}`;
   }
 
   return defaultsDeep({}, config, defaultConfig);

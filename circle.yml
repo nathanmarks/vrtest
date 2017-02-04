@@ -10,13 +10,12 @@ dependencies:
     - ~/.yarn-cache
   pre:
     - docker-compose up -d
-    - sudo ifconfig lo0 alias 10.200.10.1/24
   override:
     - yarn install --cache-folder ~/.yarn-cache --pure-lockfile
 
 test:
   override:
     - yarn run lint
-    - yarn run test
+    - SELENIUM_TEST_URL=http://172.17.42.1:3090 yarn run test
   post:
     - bash <(curl -s https://codecov.io/bash)

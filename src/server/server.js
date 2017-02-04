@@ -31,14 +31,18 @@ export function boot(config: vrtest$Config): Promise<Server> {
   });
 
   return new Promise((resolve) => {
-    const server = app.listen(config.server.port, '0.0.0.0', (err?: ?Error) => {
-      if (err) {
-        throw err;
-      }
+    const server = app.listen(
+      config.server.port,
+      config.server.host,
+      (err?: ?Error) => {
+        if (err) {
+          throw err;
+        }
 
-      // console.log(`vrtest server listening on port ${config.server.port}`);
+        // console.log(`vrtest server listening on port ${config.server.port}`);
 
-      resolve(server);
-    });
+        resolve(server);
+      },
+    );
   });
 }

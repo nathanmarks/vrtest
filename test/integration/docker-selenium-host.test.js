@@ -29,6 +29,7 @@ describe('integration: docker selenium host', () => {
 
         const config = {
           tests,
+          testUrl: process.env.SELENIUM_TEST_URL || 'http://10.200.10.1:3090',
           storage: {
             baseline: 'test/fixtures/simple/baseline',
             output: 'tmp/output',

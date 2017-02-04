@@ -28,7 +28,7 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
 
     events.emit('start');
     return configureWindow(driver)
-      .then(() => loadTestPage(driver))
+      .then(() => driver.get(`${options.profile.testUrl || options.testUrl}/tests`))
       .then(() => setupTests(driver))
       .then(() => runTests(driver, options, events))
       .then(() => {
@@ -64,10 +64,6 @@ function buildDriver(options: vrtest$RunnerOptions) {
 
 function configureWindow(driver: WebDriverClass, width: number = 1000, height: number = 800) {
   return driver.manage().window().setSize(width, height);
-}
-
-function loadTestPage(driver: WebDriverClass) {
-  return driver.get('http://10.200.10.1:3090/tests');
 }
 
 function setupTests(driver: WebDriverClass) {
