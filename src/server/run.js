@@ -9,8 +9,7 @@ export default function run(userConfig: Object): Promise<any> {
 
   const { profiles, selenium, storage, testUrl } = config;
 
-  function runProfile(): Promise<null> {
-    const profile = profiles[0];
+  function runProfile(profile: vrtest$Profile): Promise<null> {
     const runner = createRunner({ profile, selenium, storage, testUrl });
 
     config.reporters.forEach((reporter) => {
@@ -20,6 +19,10 @@ export default function run(userConfig: Object): Promise<any> {
     return runner.run();
   }
 
+  function runProfiles(): Promise<Array<null>> {
+    return Promise.all(profiles.map(runProfile));
+  }
+
   let server;
 
   return boot(config)
@@ -27,6 +30,6 @@ export default function run(userConfig: Object): Promise<any> {
       server = httpServer;
       return null;
     })
-    .then(runProfile)
+    .then(runProfiles)
     .then(() => server.close());
 }

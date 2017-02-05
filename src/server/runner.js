@@ -27,6 +27,7 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
     const driver = buildDriver(options);
 
     events.emit('start');
+
     return driver.manage().timeouts().setScriptTimeout(60000)
       .then(() => configureWindow(driver))
       .then(() => driver.get(`${options.profile.testUrl || options.testUrl}/tests`))

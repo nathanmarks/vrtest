@@ -6,3 +6,7 @@ chrome:
   image: selenium/node-chrome:3.0.1
   links:
     - hub
+firefox:
+  image: selenium/node-firefox:3.0.1
+  links:
+    - hub

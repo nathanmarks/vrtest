@@ -6,7 +6,7 @@ import proxyquire from 'proxyquire';
 import run from '../../src/server/run';
 import buildFixture from '../fixtures/build';
 
-describe('integration: server/run', () => {
+describe('integration: chrome', () => {
   let consoleLog;
   let jsonReporter;
 

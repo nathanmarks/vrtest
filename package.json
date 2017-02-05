@@ -42,7 +42,7 @@
     "lodash": "^4.17.2",
     "log-symbols": "^1.0.2",
     "png-crop": "0.0.1",
-    "selenium-webdriver": "^3.0.1"
+    "selenium-webdriver": "3.0.0-beta-3"
   },
   "devDependencies": {
     "app-module-path": "^2.1.0",
