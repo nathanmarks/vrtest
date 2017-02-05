@@ -43,6 +43,13 @@ describe.only('integration: server/run', () => {
 
         return run(config);
       })
+      // .then(() => {
+      //   return new Promise((resolve) => {
+      //     setTimeout(() => {
+      //       resolve();
+      //     }, 360000);
+      //   });
+      // })
       .then(() => {
         const results = JSON.parse(consoleLog.args[0][0]);
         assert.strictEqual(results.total, 2);

@@ -31,6 +31,11 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
       .then(() => driver.get(`${options.profile.testUrl || options.testUrl}/tests`))
       .then(() => setupTests(driver))
       .then(() => runTests(driver, options, events))
+      .then(() => driver.manage().logs().get('browser'))
+      .then((logs) => {
+        console.log(logs);
+        return true;
+      })
       .then(() => {
         // console.log('quit driver');
         return driver.quit();
@@ -68,11 +73,17 @@ function configureWindow(driver: WebDriverClass, width: number = 1000, height: n
 
 function setupTests(driver: WebDriverClass) {
   return driver
-    .executeScript(
+    .executeAsyncScript(
       /* istanbul ignore next */
       function () {
-        window.__vrtest__.createTestController();
-        window.__vrtest__.testController.start();
+        const callback = arguments[arguments.length - 1];
+        const vrtest = window.__vrtest__;
+        return vrtest.runBeforeHooks()
+          .then(() => {
+            vrtest.createTestController();
+            vrtest.testController.start();
+            return callback();
+          });
       },
     );
 }

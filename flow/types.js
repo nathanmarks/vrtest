@@ -66,9 +66,11 @@ declare type vrtest$Storage = {
 
 declare type vrtest$Client = {
   suites: Array<vrtest$Suite>,
+  testController: null | vrtest$TestController,
+  before(callback: () => Promise<any>): void,
+  runBeforeHooks(): Promise<any>,
   createSuite(name: string, options?: vrtest$SuiteOptions): vrtest$Suite,
   createTestController(): vrtest$TestController,
-  testController: null | vrtest$TestController,
 };
 
 declare type vrtest$TestController = {
