@@ -36,10 +36,13 @@ describe('client/testController', () => {
 
       assert.strictEqual(test, testController);
 
-      testController.next();
-
-      assert.strictEqual(fooDocument.add.callCount, 1);
-      assert.strictEqual(fooDocument.add.args[0][0], '<button>foo</button>');
+      return testController
+        .next()
+        .then(() => {
+          assert.strictEqual(fooDocument.add.callCount, 1);
+          assert.strictEqual(fooDocument.add.args[0][0], '<button>foo</button>');
+          return null;
+        });
 
       // testRunner.next();
       // assert.strictEqual(fooDocument.add.callCount, 2);
