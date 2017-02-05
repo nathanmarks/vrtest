@@ -28,14 +28,18 @@ describe.only('integration: server/run', () => {
 
         const config = {
           tests,
+          testUrl: process.env.DOCKER_TEST_URL || 'http://10.200.10.1:3090',
           storage: {
             baseline: 'test/fixtures/simple/baseline',
             output: 'tmp/output',
           },
+          selenium: {
+            server: 'http://127.0.0.1:4444/wd/hub',
+          },
           profiles: [{
-            name: 'phantomjs',
+            name: 'chrome',
             desiredCapabilities: {
-              browserName: 'phantomjs',
+              browserName: 'chrome',
             },
           }],
           reporters: [jsonReporter],
@@ -43,13 +47,6 @@ describe.only('integration: server/run', () => {
 
         return run(config);
       })
-      // .then(() => {
-      //   return new Promise((resolve) => {
-      //     setTimeout(() => {
-      //       resolve();
-      //     }, 360000);
-      //   });
-      // })
       .then(() => {
         const results = JSON.parse(consoleLog.args[0][0]);
         assert.strictEqual(results.total, 2);
