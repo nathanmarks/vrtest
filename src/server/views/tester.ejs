@@ -6,9 +6,10 @@
     <% scripts.forEach(function(script) { %>
       <script src="/resource?file=<%= encodeURIComponent(script) %>"></script>
     <% }); %>
-    <style>
-      body { background-color: white; }
-    </style>
+    <% stylesheets.forEach(function(stylesheet) { %>
+      <link href="/resource?file=<%= encodeURIComponent(stylesheet) %>" rel="stylesheet">
+    <% }); %>
+    <style>body { background-color: white; }</style>
   </head>
   <body>
     <div id="vrtest"></div>

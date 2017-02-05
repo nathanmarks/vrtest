@@ -5,7 +5,7 @@ import express from 'express';
 // import runTests from './run';
 
 export function boot(config: vrtest$Config): Promise<Server> {
-  const { scripts = [], tests = [] } = config;
+  const { scripts = [], stylesheets = [], tests = [] } = config;
 
   const app: express$Application = express();
 
@@ -18,7 +18,7 @@ export function boot(config: vrtest$Config): Promise<Server> {
   // });
 
   app.get('/tests', (req: express$Request, res: express$Response) => {
-    res.render('tester', { scripts: [...scripts, ...tests] });
+    res.render('tester', { scripts: [...scripts, ...tests], stylesheets });
   });
 
   app.get('/resource', (req: express$Request, res: express$Response) => {

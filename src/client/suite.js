@@ -21,7 +21,12 @@ export function createSuite(name: string, options?: vrtest$SuiteOptions): vrtest
 
 function testFactory(name: string, callback: Function): vrtest$Test {
   function exec(...args: any): Promise<any> {
-    return Promise.resolve(callback(...args));
+    return Promise.resolve(callback(...args))
+      .then(() => {
+        return new Promise((resolve) => {
+          window.requestAnimationFrame(resolve);
+        });
+      });
   }
 
   return { name, exec };

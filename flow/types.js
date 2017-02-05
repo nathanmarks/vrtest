@@ -8,6 +8,7 @@ declare type vrtest$Config = {
   tests: Array<string>,
   testUrl: string,
   scripts?: Array<string>,
+  stylesheets?: Array<string>,
   storage: {
     baseline: string,
     output: string,
@@ -32,14 +33,17 @@ declare type vrtest$Runner = {
 
 declare type vrtest$Profile = {
   name: string,
-  browser: string,
   testUrl?: string,
+  desiredCapabilities: Object,
 };
 
 declare type vrtest$RunnerOptions = {
   interactive?: boolean,
   profile: vrtest$Profile,
   storage: vrtest$Storage,
+  selenium: {
+    server: string,
+  },
   testUrl: string,
 };
 

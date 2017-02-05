@@ -53,7 +53,7 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
 function buildDriver(options: vrtest$RunnerOptions) {
   const { profile, selenium } = options;
 
-  const driver = new Builder().forBrowser(profile.browser);
+  const driver = new Builder().forBrowser(profile.desiredCapabilities.browserName);
 
   if (selenium) {
     driver.usingServer(selenium.server);
