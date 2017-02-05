@@ -6,6 +6,7 @@ import { log } from './utils/logger';
 export default function createJSONReporter(runner: vrtest$Runner) {
   const stats = createStatsCollector(runner);
   const results = {
+    profile: runner.options.profile.name,
     total: 0,
     passes: 0,
     failures: 0,

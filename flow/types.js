@@ -27,6 +27,7 @@ declare type vrtest$Config = {
 declare type vrtest$Reporter = {};
 
 declare type vrtest$Runner = {
+  options: vrtest$RunnerOptions,
   on(string, Function): events$EventEmitter,
   run(): Promise<null>,
 };

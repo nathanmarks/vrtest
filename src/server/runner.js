@@ -14,7 +14,8 @@ const { By, Builder } = webdriver;
 
 export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runner {
   const events: events$EventEmitter = new EventEmitter();
-  const runner = {
+  const runner: vrtest$Runner = {
+    options,
     on,
     run,
   };

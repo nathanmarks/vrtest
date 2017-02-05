@@ -56,10 +56,18 @@ describe('integration: multiple profiles', () => {
         return run(config);
       })
       .then(() => {
-        const results = JSON.parse(consoleLog.args[0][0]);
-        assert.strictEqual(results.total, 2);
-        assert.strictEqual(results.passes, 2);
-        assert.strictEqual(results.failures, 0);
+        const chromeResults = JSON.parse(consoleLog.args[0][0]);
+        assert.strictEqual(chromeResults.profile, 'chrome');
+        assert.strictEqual(chromeResults.total, 2);
+        assert.strictEqual(chromeResults.passes, 2);
+        assert.strictEqual(chromeResults.failures, 0);
+
+        const firefoxResults = JSON.parse(consoleLog.args[1][0]);
+        assert.strictEqual(firefoxResults.profile, 'firefox');
+        assert.strictEqual(firefoxResults.total, 2);
+        assert.strictEqual(firefoxResults.passes, 2);
+        assert.strictEqual(firefoxResults.failures, 0);
+
         return null;
       });
   });
