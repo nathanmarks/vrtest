@@ -30,21 +30,19 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
     events.emit('start');
 
     return driver.manage().timeouts().setScriptTimeout(60000)
+      .then(() => driver.getCapabilities())
       .then(() => configureWindow(driver))
       .then(() => driver.get(`${options.profile.testUrl || options.testUrl}/tests`))
       .then(() => setupTests(driver))
       .then(() => runTests(driver, options, events))
       .then(() => {
-        // console.log('quit driver');
         return driver.quit();
       })
       .catch((err) => {
-        // console.log('error!');
         events.emit('error', err);
         return true;
       })
       .then(() => {
-        // console.log('end');
         events.emit('end');
         return null;
       });
@@ -56,7 +54,7 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
 function buildDriver(options: vrtest$RunnerOptions) {
   const { profile, selenium } = options;
 
-  const driver = new Builder().forBrowser(profile.desiredCapabilities.browserName);
+  const driver = new Builder().withCapabilities(profile.desiredCapabilities);
 
   if (selenium) {
     driver.usingServer(selenium.server);

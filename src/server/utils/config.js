@@ -46,5 +46,13 @@ export function readConfig(overrides?: Object = {}): vrtest$Config {
     mergedConfig.testUrl = `http://${mergedConfig.server.host}:${mergedConfig.server.port}`;
   }
 
+  if (mergedConfig.profiles.toString() === '[object Object]') {
+    mergedConfig.profiles = Object.keys(mergedConfig.profiles)
+      .reduce((result, name) => {
+        result.push(Object.assign(mergedConfig.profiles[name], { name }));
+        return result;
+      }, []);
+  }
+
   return mergedConfig;
 }
