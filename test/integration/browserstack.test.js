@@ -28,14 +28,33 @@ describe('integration: browserstack', () => {
         server: 'http://hub-cloud.browserstack.com/wd/hub',
       },
       profiles: {
+        default: {
+          desiredCapabilities: {
+            'browserstack.user': process.env.BROWSERSTACK_USER,
+            'browserstack.key': process.env.BROWSERSTACK_KEY,
+            'browserstack.video': false,
+            'browserstack.selenium_version': '3.0.1',
+          },
+        },
         osx_chrome: {
           desiredCapabilities: {
             browserName: 'chrome',
             os: 'OS X',
-            os_version: 'El Capitan',
-            'browserstack.user': process.env.BROWSERSTACK_USER,
-            'browserstack.key': process.env.BROWSERSTACK_KEY,
-            'browserstack.selenium_version': '3.0.1',
+            os_version: 'Sierra',
+          },
+        },
+        osx_safari: {
+          desiredCapabilities: {
+            browserName: 'safari',
+            os: 'OS X',
+            os_version: 'Sierra',
+          },
+        },
+        edge: {
+          desiredCapabilities: {
+            browserName: 'edge',
+            os: 'WINDOWS',
+            os_version: '10',
           },
         },
       },
@@ -79,32 +98,14 @@ describe('integration: browserstack', () => {
         return run(config);
       })
       .then(() => {
-        const results = JSON.parse(consoleLog.args[0][0]);
-        assert.strictEqual(results.total, 2);
-        assert.strictEqual(results.passes, 2);
-        assert.strictEqual(results.failures, 0);
+        ['osx_chrome', 'osx_safari', 'edge'].forEach((n, i) => {
+          const results = JSON.parse(consoleLog.args[i][0]);
+          assert.strictEqual(results.profile, n);
+          assert.strictEqual(results.total, 2);
+          assert.strictEqual(results.passes, 2);
+          assert.strictEqual(results.failures, 0);
+        });
         return null;
       });
   });
-
-  // it('should fail the second test', function () {
-  //   this.timeout(Infinity);
-
-  //   return buildFixture('simple/tests-broken.js')
-  //     .then((stats) => {
-  //       const tests = stats.compilation.assets['tests.js'].existsAt;
-  //       const config = createDockerConfig(tests);
-
-  //       return run(config);
-  //     })
-  //     .then(() => {
-  //       const results = JSON.parse(consoleLog.args[0][0]);
-  //       assert.strictEqual(results.total, 2);
-  //       assert.strictEqual(results.passes, 1);
-  //       assert.strictEqual(results.failures, 1);
-  //       assert.strictEqual(results.tests[0].passed, true);
-  //       assert.strictEqual(results.tests[1].passed, false);
-  //       return null;
-  //     });
-  // });
 });

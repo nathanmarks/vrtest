@@ -47,9 +47,12 @@ export function readConfig(overrides?: Object = {}): vrtest$Config {
   }
 
   if (mergedConfig.profiles.toString() === '[object Object]') {
-    mergedConfig.profiles = Object.keys(mergedConfig.profiles)
+    const { default: defaultProfile = {}, ...otherProfiles } = mergedConfig.profiles;
+    mergedConfig.profiles = Object.keys(otherProfiles)
       .reduce((result, name) => {
-        result.push(Object.assign(mergedConfig.profiles[name], { name }));
+        result.push(
+          defaultsDeep(Object.assign(mergedConfig.profiles[name], { name }), defaultProfile),
+        );
         return result;
       }, []);
   }
