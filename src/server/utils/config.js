@@ -46,7 +46,7 @@ export function readConfig(overrides?: Object = {}): vrtest$Config {
     mergedConfig.testUrl = `http://${mergedConfig.server.host}:${mergedConfig.server.port}`;
   }
 
-  if (mergedConfig.profiles.toString() === '[object Object]') {
+  if (!Array.isArray(mergedConfig.profiles) && mergedConfig.profiles.toString() === '[object Object]') {
     const { default: defaultProfile = {}, ...otherProfiles } = mergedConfig.profiles;
     mergedConfig.profiles = Object.keys(otherProfiles)
       .reduce((result, name) => {

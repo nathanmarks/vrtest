@@ -24,28 +24,26 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
     return events.on(event, cb);
   }
 
-  function run(): Promise<null> {
-    const driver = buildDriver(options);
+  function handleError(err: any) {
+    events.emit('error', err);
+  }
+
+  async function run(): Promise<null> {
+    const driver = await buildDriver(options);
+    const testUrl = `${options.profile.testUrl || options.testUrl}/tests`;
 
     events.emit('start');
 
-    return driver.manage().timeouts().setScriptTimeout(60000)
-      .then(() => driver.getCapabilities())
-      .then(() => configureWindow(driver))
-      .then(() => driver.get(`${options.profile.testUrl || options.testUrl}/tests`))
-      .then(() => setupTests(driver))
-      .then(() => runTests(driver, options, events))
-      .then(() => {
-        return driver.quit();
-      })
-      .catch((err) => {
-        events.emit('error', err);
-        return true;
-      })
-      .then(() => {
-        events.emit('end');
-        return null;
-      });
+    await driver.manage().timeouts().setScriptTimeout(60000).catch(handleError);
+    await driver.manage().window().setSize(1000, 700).catch(handleError);
+    await driver.get(testUrl).catch(handleError);
+    await setupTests(driver).catch(handleError);
+    await runTests(driver, options, events).catch(handleError);
+    await driver.quit().catch(handleError);
+
+    events.emit('end');
+
+    return null;
   }
 
   return runner;
@@ -61,10 +59,6 @@ function buildDriver(options: vrtest$RunnerOptions) {
   }
 
   return driver.build();
-}
-
-function configureWindow(driver: WebDriverClass, width: number = 1000, height: number = 800) {
-  return driver.manage().window().setSize(width, height);
 }
 
 function setupTests(driver: WebDriverClass) {

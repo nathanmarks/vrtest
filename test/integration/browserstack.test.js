@@ -98,9 +98,16 @@ describe('integration: browserstack', () => {
         return run(config);
       })
       .then(() => {
-        ['osx_chrome', 'osx_safari', 'edge'].forEach((n, i) => {
+
+        assert.strictEqual(consoleLog.args.length, 3, 'there should be 3 result sets logged');
+
+        const profiles = ['osx_chrome', 'osx_safari', 'edge'];
+
+        Array(3).forEach((n, i) => {
           const results = JSON.parse(consoleLog.args[i][0]);
-          assert.strictEqual(results.profile, n);
+          const idx = profiles.indexOf(results.profile);
+          assert.strictEqual(idx !== -1, true);
+          profiles.splice(idx, 1);
           assert.strictEqual(results.total, 2);
           assert.strictEqual(results.passes, 2);
           assert.strictEqual(results.failures, 0);
