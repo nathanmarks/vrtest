@@ -98,7 +98,6 @@ describe('integration: browserstack', () => {
         return run(config);
       })
       .then(() => {
-
         assert.strictEqual(consoleLog.args.length, 3, 'there should be 3 result sets logged');
 
         const profiles = ['osx_chrome', 'osx_safari', 'edge'];
