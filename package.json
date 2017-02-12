@@ -1,6 +1,6 @@
 {
-  "name": "vrtest",
-  "version": "0.1.1-alpha.1",
+  "name": "vrtest-dev",
+  "version": "0.1.1-alpha.7",
   "private": true,
   "keywords": [],
   "description": "wip",
@@ -9,7 +9,7 @@
     "vrtest": "./bin/vrtest"
   },
   "scripts": {
-    "build": "yarn run clean && yarn run check && yarn run build:babel && yarn run build:copy-files",
+    "build": "yarn run clean && yarn run build:babel && yarn run build:copy-files",
     "build:babel": "babel ./src --ignore *.spec.js --out-dir ./build",
     "build:copy-files": "babel-node ./scripts/copy-files.js",
     "check": "yarn run lint && yarn run flow && yarn run test",
