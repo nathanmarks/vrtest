@@ -39,8 +39,6 @@ export function boot(config: vrtest$Config): Promise<Server> {
           throw err;
         }
 
-        // console.log(`vrtest server listening on port ${config.server.port}`);
-
         resolve(server);
       },
     );

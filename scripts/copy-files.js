@@ -1,15 +1,15 @@
 // @flow weak
-/* eslint-disable no-console */
+/* eslint-disable */
 
 import path from 'path';
 import fs from 'fs-promise';
 
 function resolveBuildPath(file) {
-  return path.resolve(__dirname, '../build/', path.basename(file));
+  return path.resolve(__dirname, '../build/', file);
 }
 
-function copyFile(file) {
-  const buildPath = resolveBuildPath(file);
+function copyFile(file, destination) {
+  const buildPath = resolveBuildPath(destination || file);
   return fs.copy(file, buildPath)
     .then(() => console.log(`Copied ${file} to ${buildPath}`));
 }
@@ -22,6 +22,8 @@ function createPackageFile() {
   .then((packageData) => {
     const {
       author,
+      bin,
+      main,
       version,
       description,
       keywords,
@@ -33,11 +35,12 @@ function createPackageFile() {
     } = packageData;
 
     const minimalPackage = {
-      name: 'material-ui',
+      name: 'vrtest',
       author,
+      bin,
+      main,
       version,
       description,
-      main: './index.js',
       keywords,
       repository,
       license,
@@ -55,13 +58,15 @@ function createPackageFile() {
 }
 
 const files = [
-  'README.md',
-  'CHANGELOG.md',
-  'LICENSE',
-  'yarn.lock',
+  ['bin'],
+  ['README.md'],
+  ['CHANGELOG.md'],
+  ['LICENSE'],
+  ['yarn.lock'],
+  ['src/server/views/tester.ejs', 'server/views/tester.ejs'],
 ];
 
 Promise.all(
-  files.map((file) => copyFile(file)),
+  files.map((file) => copyFile(...file)),
 )
 .then(() => createPackageFile());

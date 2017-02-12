@@ -5,6 +5,7 @@ import { spy } from 'sinon';
 import ngrok from 'ngrok';
 import proxyquire from 'proxyquire';
 import run from '../../src/server/run';
+import { readConfig } from '../../src/server/utils/config';
 import buildFixture from '../fixtures/build';
 
 describe('integration: browserstack', () => {
@@ -13,7 +14,7 @@ describe('integration: browserstack', () => {
   let testUrl;
 
   function createDockerConfig(tests) {
-    return {
+    return readConfig({
       tests,
       testUrl,
       server: {
@@ -59,7 +60,7 @@ describe('integration: browserstack', () => {
         },
       },
       reporters: [jsonReporter],
-    };
+    });
   }
 
   beforeEach(() => {

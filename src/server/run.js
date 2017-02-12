@@ -1,12 +1,12 @@
 // @flow
 
 import { boot } from './server';
-import { readConfig } from './utils/config';
 import createRunner from './runner';
 
-export default function run(userConfig: Object): Promise<any> {
-  const config: vrtest$Config = readConfig(userConfig);
-
+export default function run(
+  config: vrtest$Config,
+  runOptions?: vrtest$RunOptions = {},
+): Promise<any> {
   const { profiles, selenium, storage, testUrl } = config;
 
   function runProfile(profile: vrtest$Profile): Promise<null> {
@@ -16,7 +16,7 @@ export default function run(userConfig: Object): Promise<any> {
       reporter(runner);
     });
 
-    return runner.run();
+    return runner.run(runOptions);
   }
 
   function runProfiles(): Promise<Array<null>> {

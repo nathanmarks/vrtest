@@ -24,13 +24,17 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
     return events.on(event, cb);
   }
 
-  function handleError(err: any) {
-    events.emit('error', err);
-  }
-
-  async function run(): Promise<null> {
+  async function run(runOptions: vrtest$RunOptions): Promise<null> {
     const driver = await buildDriver(options);
     const testUrl = `${options.profile.testUrl || options.testUrl}/tests`;
+
+    function handleError(err: any) {
+      events.emit('error', err);
+      return driver.quit();
+    }
+
+    process.on('unhandledRejection', handleError);
+    process.on('uncaughtException', handleError);
 
     events.emit('start');
 
@@ -38,7 +42,7 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
     await driver.manage().window().setSize(1000, 700).catch(handleError);
     await driver.get(testUrl).catch(handleError);
     await setupTests(driver).catch(handleError);
-    await runTests(driver, options, events).catch(handleError);
+    await runTests(driver, events, options, runOptions).catch(handleError);
     await driver.quit().catch(handleError);
 
     events.emit('end');
@@ -96,10 +100,12 @@ function nextTest(driver: WebDriverClass) {
 
 async function runTests(
   driver: WebDriverClass,
-  options: vrtest$RunnerOptions,
   events: events$EventEmitter,
+  options: vrtest$RunnerOptions,
+  runOptions: vrtest$RunOptions,
 ) {
   const { profile, storage } = options;
+  const { record } = runOptions;
 
   let done = false;
   let lastSuite = '';
@@ -125,9 +131,24 @@ async function runTests(
       const windowSize = await driver.manage().window().getSize();
       const screenshotData = await driver.takeScreenshot();
 
-      const screenshotPath = path.resolve(storage.output, profile.name, `${testName}.png`);
-      const expectedPath = path.resolve(storage.baseline, profile.name, `${testName}.png`);
-      const diffPath = path.resolve(storage.output, profile.name, `${testName}.diff.png`);
+      const screenshotPath = path.resolve(
+        record ? storage.baseline : storage.output,
+        profile.name,
+        suiteName,
+        `${testName}.png`,
+      );
+      const expectedPath = path.resolve(
+        storage.baseline,
+        profile.name,
+        suiteName,
+        `${testName}.png`,
+      );
+      const diffPath = path.resolve(
+        storage.output,
+        profile.name,
+        suiteName,
+        `${testName}.diff.png`,
+      );
 
       await saveScreenshot(screenshotPath, screenshotData);
       await cropScreenshot(

@@ -11,15 +11,19 @@ export default function createSpecReporter(runner: vrtest$Runner) {
   runner.on('start', () => {
     log('');
     log(`  ${chalk.white('Starting tests')}`);
+  });
+
+  runner.on('suite', (suiteName) => {
     log('');
+    log(`  ${chalk.yellow(suiteName)}`);
   });
 
   runner.on('pass', (test) => {
-    log(`  ${chalk.green(logSymbols.success)}  ${test.name}`);
+    log(`    ${chalk.green(logSymbols.success)}  ${test.name}`);
   });
 
   runner.on('fail', (test) => {
-    log(`  ${chalk.red(logSymbols.error)}  ${test.name}`);
+    log(`    ${chalk.red(logSymbols.error)}  ${test.name}`);
   });
 
   runner.on('end', () => {

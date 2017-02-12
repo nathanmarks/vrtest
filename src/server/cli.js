@@ -3,10 +3,11 @@
 import commander from 'commander';
 import { boot } from './server';
 import { readConfig } from './utils/config';
+import run from './run';
 
 export default function start(
   args: Array<any> = process.argv,
-  program: Object = commander,
+  program: Object = new commander.Command(),
 ) {
   program
     .version('0.1.0')
@@ -15,14 +16,19 @@ export default function start(
   program
     .command('run')
     .description('Run the visual regression tests')
-    .action(() => {
-      console.log('run');
+    .option('-c, --config <file>', 'Specify a .js config file')
+    .option('-r, --record', 'Record new baseline images')
+    // .option('-i, --interactive', 'Enable interactive mode')
+    // .option('-g, --grep', 'grep the tests')
+    // .option('-p', '--profiles', 'specify the config profiles to run')
+    .action(({ config, ...other }) => {
+      run(readConfig(config), other);
     });
 
   program
     .command('server')
-    .option('-c, --config', 'Specify a .js config file')
     .description('Run the visual regression test server')
+    .option('-c, --config', 'Specify a .js config file')
     .action((config = {}) => {
       return boot(readConfig(config));
     });

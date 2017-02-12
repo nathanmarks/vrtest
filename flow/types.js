@@ -29,7 +29,14 @@ declare type vrtest$Reporter = {};
 declare type vrtest$Runner = {
   options: vrtest$RunnerOptions,
   on(string, Function): events$EventEmitter,
-  run(): Promise<null>,
+  run(runOptions: vrtest$RunOptions): Promise<null>,
+};
+
+declare type vrtest$RunOptions = {
+  interactive?: boolean,
+  record?: boolean,
+  grep?: boolean,
+  profiles?: boolean,
 };
 
 declare type vrtest$Profile = {

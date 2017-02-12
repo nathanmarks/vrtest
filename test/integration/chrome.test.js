@@ -4,6 +4,7 @@ import { assert } from 'chai';
 import { spy } from 'sinon';
 import proxyquire from 'proxyquire';
 import run from '../../src/server/run';
+import { readConfig } from '../../src/server/utils/config';
 import buildFixture from '../fixtures/build';
 
 describe('integration: chrome', () => {
@@ -11,7 +12,7 @@ describe('integration: chrome', () => {
   let jsonReporter;
 
   function createDockerConfig(tests) {
-    return {
+    return readConfig({
       tests,
       testUrl: process.env.DOCKER_TEST_URL || 'http://10.200.10.1:3090',
       storage: {
@@ -28,7 +29,7 @@ describe('integration: chrome', () => {
         },
       }],
       reporters: [jsonReporter],
-    };
+    });
   }
 
   beforeEach(() => {
