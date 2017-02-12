@@ -1,10 +1,10 @@
 {
   "name": "vrtest-dev",
-  "version": "0.1.1-alpha.7",
+  "version": "0.1.1-beta.1",
   "private": true,
   "keywords": [],
   "description": "wip",
-  "main": "index.js",
+  "main": "./index.js",
   "bin": {
     "vrtest": "./bin/vrtest"
   },
@@ -12,6 +12,7 @@
     "build": "yarn run clean && yarn run build:babel && yarn run build:copy-files",
     "build:babel": "babel ./src --ignore *.spec.js --out-dir ./build",
     "build:copy-files": "babel-node ./scripts/copy-files.js",
+    "build:publish": "yarn run build && cd build && yarn publish && cd ..",
     "check": "yarn run lint && yarn run flow && yarn run test",
     "clean": "rimraf build && rimraf tmp",
     "lint": "eslint src test",
