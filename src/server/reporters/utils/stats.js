@@ -4,7 +4,7 @@ import chalk from 'chalk';
 import { log } from './logger';
 
 export default function createStatsCollector(runner: vrtest$Runner) {
-  const stats = {
+  const stats: vrtest$Stats = {
     start: undefined,
     end: undefined,
     tests: 0,
@@ -31,6 +31,10 @@ export default function createStatsCollector(runner: vrtest$Runner) {
   });
 
   return {
+    get all(): vrtest$Stats {
+      return stats;
+    },
+
     get tests(): number {
       return stats.tests;
     },

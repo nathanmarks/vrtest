@@ -9,6 +9,7 @@ import {
   cropScreenshot,
   compareScreenshots,
 } from './utils/screenshots';
+import createStatsCollector from './reporters/utils/stats';
 
 const { By, Builder } = webdriver;
 
@@ -24,9 +25,10 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
     return events.on(event, cb);
   }
 
-  async function run(runOptions: vrtest$RunOptions): Promise<null> {
+  async function run(runOptions: vrtest$RunOptions): Promise<vrtest$Stats> {
     const driver = await buildDriver(options);
     const testUrl = `${options.profile.testUrl || options.testUrl}/tests`;
+    const stats = createStatsCollector(runner);
 
     function handleError(err: any) {
       events.emit('error', err);
@@ -47,7 +49,7 @@ export default function createRunner(options: vrtest$RunnerOptions): vrtest$Runn
 
     events.emit('end');
 
-    return null;
+    return stats.all;
   }
 
   return runner;

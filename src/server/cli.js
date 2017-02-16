@@ -22,7 +22,13 @@ export default function start(
     // .option('-g, --grep', 'grep the tests')
     // .option('-p', '--profiles', 'specify the config profiles to run')
     .action(({ config, ...other }) => {
-      run(readConfig(config), other);
+      return run(readConfig(config), other)
+        .then((stats) => {
+          if (stats.failures) {
+            process.exit(1);
+          }
+          return null;
+        });
     });
 
   program

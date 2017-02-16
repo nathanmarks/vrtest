@@ -29,7 +29,7 @@ declare type vrtest$Reporter = {};
 declare type vrtest$Runner = {
   options: vrtest$RunnerOptions,
   on(string, Function): events$EventEmitter,
-  run(runOptions: vrtest$RunOptions): Promise<null>,
+  run(runOptions: vrtest$RunOptions): Promise<vrtest$Stats>,
 };
 
 declare type vrtest$RunOptions = {
@@ -58,6 +58,14 @@ declare type vrtest$RunnerOptions = {
 declare type vrtest$Storage = {
   baseline: string,
   output: string,
+};
+
+declare type vrtest$Stats = {
+  start: Date | typeof undefined,
+  end: Date | typeof undefined,
+  tests: number,
+  passes: number,
+  failures: number,
 };
 
 // declare class vrtest$Storage {
