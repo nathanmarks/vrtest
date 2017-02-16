@@ -2,7 +2,7 @@
 /* eslint-env mocha */
 
 import { assert } from 'chai';
-import { spy } from 'sinon';
+import { spy, stub } from 'sinon';
 import proxyquire from 'proxyquire';
 
 describe('cli', () => {
@@ -13,6 +13,7 @@ describe('cli', () => {
   beforeEach(() => {
     runSpy = spy();
     readyConfigSpy = spy();
+    runSpy = stub().returns(Promise.resolve({}));
     start = proxyquire('./cli', {
       './run': {
         default: runSpy,
