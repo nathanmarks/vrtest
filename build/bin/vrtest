@@ -1,3 +1,0 @@
-#!/usr/bin/env node
-
-require('vrtest/server/cli.js').default(process.argv);
