@@ -20,9 +20,9 @@ dependencies:
     - if [[ -e ~/.docker/node-chrome.tar ]]; then docker load -i ~/.docker/node-chrome.tar; fi
     - if [[ -e ~/.docker/node-firefox.tar ]]; then docker load -i ~/.docker/node-firefox.tar; fi
     - docker-compose up -d
-    - if [[ ! -e ~/.docker/hub.tar ]]; then docker save selenium/hub:3.0.1 > ~/.docker/hub.tar; fi
-    - if [[ ! -e ~/.docker/node-chrome.tar ]]; then docker save selenium/node-chrome:3.0.1 > ~/.docker/node-chrome.tar; fi
-    - if [[ ! -e ~/.docker/node-firefox.tar ]]; then docker save selenium/node-firefox:3.0.1 > ~/.docker/node-firefox.tar; fi
+    - if [[ ! -e ~/.docker/hub.tar ]]; then docker save selenium/hub:3.3.1 > ~/.docker/hub.tar; fi
+    - if [[ ! -e ~/.docker/node-chrome.tar ]]; then docker save selenium/node-chrome:3.3.1 > ~/.docker/node-chrome.tar; fi
+    - if [[ ! -e ~/.docker/node-firefox.tar ]]; then docker save selenium/node-firefox:3.3.1 > ~/.docker/node-firefox.tar; fi
 
 test:
   override:
